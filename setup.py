@@ -31,5 +31,11 @@ setup(
     install_requires=["datasette"],
     extras_require={"test": ["pytest", "pytest-asyncio"]},
     tests_require=["datasette-leaflet[test]"],
+    package_data={
+        "datasette_leaflet": [
+            "static/*.js",
+            "static/*.css",
+        ],
+    },
     python_requires=">=3.6",
 )
