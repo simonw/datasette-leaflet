@@ -17,7 +17,9 @@ async def test_plugin_is_installed(datasette):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("asset", ["leaflet-v1.7.1.js", "leaflet-v1.7.1.min.js"])
+@pytest.mark.parametrize(
+    "asset", ["leaflet-v1.7.1.js", "leaflet-v1.7.1.min.js", "leaflet-v1.7.1.css"]
+)
 async def test_static_assets(datasette, asset):
     path = "/-/static-plugins/datasette-leaflet/{}".format(asset)
     assert (await datasette.client.get(path)).status_code == 200
@@ -25,5 +27,6 @@ async def test_static_assets(datasette, asset):
 
 def test_extra_template_vars(datasette):
     assert extra_template_vars(datasette) == {
-        "datasette_leaflet_url": "/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.js"
+        "datasette_leaflet_url": "/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.js",
+        "datasette_leaflet_css_url": "/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.css",
     }
