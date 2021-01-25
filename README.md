@@ -32,6 +32,11 @@ The plugin makes `leaflet.js` and `leaflet.css` available as static files. It pr
 - `{{ datasette_leaflet_url }}` is the URL to the JavaScript
 - `{{ datasette_leaflet_css_url }}` is the URL to the CSS
 
+These URLs are also made available as global JavaScript constants:
+
+- `datasette.leaflet.JAVASCRIPT_URL`
+- `datasette.leaflet.CSS_URL`
+
 The JavaScript is packaed as a [JavaScript module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules). You can dynamically import the JavaScript from a custom template like this:
 
 ```html+jinja

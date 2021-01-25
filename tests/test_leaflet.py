@@ -1,5 +1,5 @@
 from datasette.app import Datasette
-from datasette_leaflet import extra_template_vars
+from datasette_leaflet import extra_body_script, extra_template_vars
 import pytest
 
 
@@ -30,3 +30,13 @@ def test_extra_template_vars(datasette):
         "datasette_leaflet_url": "/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.js",
         "datasette_leaflet_css_url": "/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.css",
     }
+
+
+def test_extra_body_script(datasette):
+    assert extra_body_script(datasette).strip() == (
+        "window.datasette = window.datasette || {};\n"
+        "datasette.leaflet = {\n"
+        "    JAVASCRIPT_URL: '/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.js',\n"
+        "    CSS_URL: '/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.css'\n"
+        "};"
+    )
