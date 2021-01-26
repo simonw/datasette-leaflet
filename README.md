@@ -14,11 +14,11 @@ This library is intended to solve this problem, by providing a single plugin the
 Plugins that use this:
 
 - [datasette-leaflet-freedraw](https://datasette.io/plugins/datasette-leaflet-freedraw)
+- [datasette-leaflet-geojson](https://datasette.io/plugins/datasette-leaflet-geojson)
 
 Plugins that could benefit from this:
 
 - [datasette-cluster-map](https://datasette.io/plugins/datasette-cluster-map)
-- [datasette-leaflet-geojson](https://datasette.io/plugins/datasette-leaflet-geojson)
 
 ## Installation
 
