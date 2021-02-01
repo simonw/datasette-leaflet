@@ -35,6 +35,7 @@ setup(
         "datasette_leaflet": [
             "static/*.js",
             "static/*.css",
+            "static/images/*",
         ],
     },
     python_requires=">=3.6",
