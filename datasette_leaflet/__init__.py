@@ -11,6 +11,8 @@ CSS_FILE = "leaflet.css"
 def extra_template_vars(datasette):
     config = datasette.plugin_config("datasette-leaflet") or {}
     version = config.get("version", "1.8.0")
+    if version not in LEAFLET_VERSIONS:
+        version = "1.8.0"
 
     return {
         name: datasette.urls.static_plugins("datasette-leaflet", file)
@@ -25,6 +27,9 @@ def extra_template_vars(datasette):
 def extra_body_script(datasette):
     config = datasette.plugin_config("datasette-leaflet") or {}
     version = config.get("version", "1.8.0")
+    if version not in LEAFLET_VERSIONS:
+        version = "1.8.0"
+
     return textwrap.dedent(
         """
     window.datasette = window.datasette || {{}};
