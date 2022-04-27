@@ -27,23 +27,26 @@ Usually this plugin will be a dependency of other plugins, so it should be insta
 
 ## Usage
 
-The plugin makes `leaflet.js` and `leaflet.css` available as static files. It provides two custom template variables with the URLs of those two files.
+The plugin makes `leaflet.js`, `leaflet-src.esm.js` and `leaflet.css` available as static files. It provides two custom template variables with the URLs of those two files.
 
-- `{{ datasette_leaflet_url }}` is the URL to the JavaScript
-- `{{ datasette_leaflet_css_url }}` is the URL to the CSS
+- `{{ datasette_leaflet_url }}` is the URL to the JavaScript as UMD (`leaflet.js`)
+- `{{ datasette_leaflet_esm }}` is the URL for the JavaScript module (`leaflet-src.esm.js`)
+- `{{ datasette_leaflet_css_url }}` is the URL to the CSS (`leaflet.css`)
 
 These URLs are also made available as global JavaScript constants:
 
 - `datasette.leaflet.JAVASCRIPT_URL`
+- `datasette.leaflet.JAVASCRIPT_ESM_URL`
 - `datasette.leaflet.CSS_URL`
 
-The JavaScript is packaed as a [JavaScript module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules). You can dynamically import the JavaScript from a custom template like this:
+The JavaScript is packaged both as a [JavaScript module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) and [UMD script](https://github.com/umdjs/umd). You can dynamically import the JavaScript from a custom template like this:
 
 ```html+jinja
 <script type="module">
 import('{{ datasette_leaflet_url }}')
-  .then((leaflet) => {
-    /* Use leaflet here */
+  .then(() => {
+    /* Use window.L here */
+    L.map(...)
   });
 </script>
 ```
@@ -75,7 +78,7 @@ let link = document.createElement('link');
 link.rel = 'stylesheet';
 link.href = '{{ datasette_leaflet_css_url }}';
 document.head.appendChild(link);
-import('{{ datasette_leaflet_url }}')
+import('{{ datasette_leaflet_esm }}')
   .then((leaflet) => {
     let div = document.createElement('div');
     div.style.height = '400px';
@@ -92,3 +95,26 @@ import('{{ datasette_leaflet_url }}')
   });
 </script>
 ```
+
+## Choosing a Leaflet version
+
+By default, this plugin will put the latest version of Leaflet on the page, currently [v1.8.0](https://github.com/Leaflet/Leaflet/releases/tag/v1.8.0). The previous version, [v1.7.1](https://github.com/Leaflet/Leaflet/releases/tag/v1.7.1), is also available.
+
+Configure a version in project metadata, like so:
+
+```json
+{
+  "plugins": {
+    "datasette-leaflet": {
+      "version": "1.7.1"
+    }
+  }
+}
+```
+
+Available versions are:
+
+- `1.7.1`
+- `1.8.0`
+
+Invalid versions will default to `1.8.0`.
