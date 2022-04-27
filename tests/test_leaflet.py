@@ -40,6 +40,7 @@ def test_extra_template_vars(datasette):
     version = config.get("version", "1.8.0")
     assert extra_template_vars(datasette) == {
         "datasette_leaflet_url": f"/-/static-plugins/datasette-leaflet/v{version}/leaflet.js",
+        "datasette_leaflet_esm": f"/-/static-plugins/datasette-leaflet/v{version}/leaflet-src.esm.js",
         "datasette_leaflet_css_url": f"/-/static-plugins/datasette-leaflet/v{version}/leaflet.css",
     }
 
@@ -51,6 +52,7 @@ def test_extra_body_script(datasette):
         "window.datasette = window.datasette || {};\n"
         "datasette.leaflet = {\n"
         f"    JAVASCRIPT_URL: '/-/static-plugins/datasette-leaflet/v{version}/leaflet.js',\n"
+        f"    JAVASCRIPT_ESM_URL: '/-/static-plugins/datasette-leaflet/v{version}/leaflet-src.esm.js',\n"
         f"    CSS_URL: '/-/static-plugins/datasette-leaflet/v{version}/leaflet.css'\n"
         "};"
     )
