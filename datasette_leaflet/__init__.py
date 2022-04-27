@@ -1,23 +1,30 @@
 from datasette import hookimpl
 import textwrap
 
-JS_FILE = "leaflet-v1.7.1.js"
-CSS_FILE = "leaflet-v1.7.1.css"
+LEAFLET_VERSIONS = ["1.7.1", "1.8.0"]
+
+JS_FILE = "leaflet.js"
+CSS_FILE = "leaflet.css"
 
 
 @hookimpl
 def extra_template_vars(datasette):
+    config = datasette.plugin_config("datasette-leaflet") or {}
+    version = config.get("version", "1.8.0")
+
     return {
         name: datasette.urls.static_plugins("datasette-leaflet", file)
         for name, file in {
-            "datasette_leaflet_url": JS_FILE,
-            "datasette_leaflet_css_url": CSS_FILE,
+            "datasette_leaflet_url": f"v{version}/{JS_FILE}",
+            "datasette_leaflet_css_url": f"v{version}/{CSS_FILE}",
         }.items()
     }
 
 
 @hookimpl
 def extra_body_script(datasette):
+    config = datasette.plugin_config("datasette-leaflet") or {}
+    version = config.get("version", "1.8.0")
     return textwrap.dedent(
         """
     window.datasette = window.datasette || {{}};
@@ -26,7 +33,9 @@ def extra_body_script(datasette):
         CSS_URL: '{}'
     }};
     """.format(
-            datasette.urls.static_plugins("datasette-leaflet", JS_FILE),
-            datasette.urls.static_plugins("datasette-leaflet", CSS_FILE),
+            datasette.urls.static_plugins("datasette-leaflet", f"v{version}/{JS_FILE}"),
+            datasette.urls.static_plugins(
+                "datasette-leaflet", f"v{version}/{CSS_FILE}"
+            ),
         )
     )

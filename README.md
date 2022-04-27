@@ -92,3 +92,26 @@ import('{{ datasette_leaflet_url }}')
   });
 </script>
 ```
+
+## Choosing a Leaflet version
+
+By default, this plugin will put the latest version of Leaflet on the page, currently [v1.8.0](https://github.com/Leaflet/Leaflet/releases/tag/v1.8.0). The previous version, [v1.7.1](https://github.com/Leaflet/Leaflet/releases/tag/v1.7.1), is also available.
+
+Configure a version in project metadata, like so:
+
+```json
+{
+  "plugins": {
+    "datasette-leaflet": {
+      "version": "1.7.1"
+    }
+  }
+}
+```
+
+Available versions are:
+
+- `1.7.1`
+- `1.8.0`
+
+Invalid versions will default to `1.8.0`.

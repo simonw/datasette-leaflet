@@ -8,3 +8,7 @@ venv
 *.egg-info
 .DS_Store
 .vscode
+build/
+
+Pipfile
+Pipfile.lock
