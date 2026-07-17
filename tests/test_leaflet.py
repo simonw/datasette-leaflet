@@ -18,7 +18,7 @@ async def test_plugin_is_installed(datasette):
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "asset", ["leaflet-v1.7.1.js", "leaflet-v1.7.1.min.js", "leaflet-v1.7.1.css"]
+    "asset", ["leaflet-v1.9.4.js", "leaflet-v1.9.4.min.js", "leaflet-v1.9.4.css"]
 )
 async def test_static_assets(datasette, asset):
     path = "/-/static-plugins/datasette-leaflet/{}".format(asset)
@@ -27,8 +27,8 @@ async def test_static_assets(datasette, asset):
 
 def test_extra_template_vars(datasette):
     assert extra_template_vars(datasette) == {
-        "datasette_leaflet_url": "/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.js",
-        "datasette_leaflet_css_url": "/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.css",
+        "datasette_leaflet_url": "/-/static-plugins/datasette-leaflet/leaflet-v1.9.4.js",
+        "datasette_leaflet_css_url": "/-/static-plugins/datasette-leaflet/leaflet-v1.9.4.css",
     }
 
 
@@ -36,7 +36,7 @@ def test_extra_body_script(datasette):
     assert extra_body_script(datasette).strip() == (
         "window.datasette = window.datasette || {};\n"
         "datasette.leaflet = {\n"
-        "    JAVASCRIPT_URL: '/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.js',\n"
-        "    CSS_URL: '/-/static-plugins/datasette-leaflet/leaflet-v1.7.1.css'\n"
+        "    JAVASCRIPT_URL: '/-/static-plugins/datasette-leaflet/leaflet-v1.9.4.js',\n"
+        "    CSS_URL: '/-/static-plugins/datasette-leaflet/leaflet-v1.9.4.css'\n"
         "};"
     )

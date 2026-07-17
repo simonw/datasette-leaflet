@@ -1,8 +1,8 @@
 from datasette import hookimpl
 import textwrap
 
-JS_FILE = "leaflet-v1.7.1.js"
-CSS_FILE = "leaflet-v1.7.1.css"
+JS_FILE = "leaflet-v1.9.4.js"
+CSS_FILE = "leaflet-v1.9.4.css"
 
 
 @hookimpl
