@@ -1,0 +1,28 @@
+[project]
+name = "datasette-leaflet"
+version = "0.2.2"
+description = "A plugin that bundles Leaflet.js for Datasette"
+readme = "README.md"
+authors = [{name = "Simon Willison"}]
+license = "Apache-2.0"
+requires-python = ">=3.10"
+dependencies = ["datasette"]
+
+[project.urls]
+Homepage = "https://github.com/simonw/datasette-leaflet"
+Issues = "https://github.com/simonw/datasette-leaflet/issues"
+CI = "https://github.com/simonw/datasette-leaflet/actions"
+Changelog = "https://github.com/simonw/datasette-leaflet/releases"
+
+[project.entry-points.datasette]
+leaflet = "datasette_leaflet"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
