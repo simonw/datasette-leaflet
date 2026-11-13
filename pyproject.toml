@@ -1,6 +1,6 @@
 [project]
 name = "datasette-leaflet"
-version = "0.2.2"
+version = "0.3"
 description = "A plugin that bundles Leaflet.js for Datasette"
 readme = "README.md"
 authors = [{name = "Simon Willison"}]
