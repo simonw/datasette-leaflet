@@ -5,7 +5,7 @@ description = "A plugin that bundles Leaflet.js for Datasette"
 readme = "README.md"
 authors = [{name = "Simon Willison"}]
 license = "Apache-2.0"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = ["datasette"]
 
 [project.urls]
