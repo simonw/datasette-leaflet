@@ -14420,3 +14420,17 @@ export { Bounds, Browser, CRS, Canvas, Circle, CircleMarker, Class, Control, Div
 // Added by datasette-leaflet: the ES module build does not create the
 // global L that plugins such as Leaflet.markercluster expect
 window.L = { Bounds: Bounds, Browser: Browser, CRS: CRS, Canvas: Canvas, Circle: Circle, CircleMarker: CircleMarker, Class: Class, Control: Control, DivIcon: DivIcon, DivOverlay: DivOverlay, DomEvent: DomEvent, DomUtil: DomUtil, Draggable: Draggable, Evented: Evented, FeatureGroup: FeatureGroup, GeoJSON: GeoJSON, GridLayer: GridLayer, Handler: Handler, Icon: Icon, ImageOverlay: ImageOverlay, LatLng: LatLng, LatLngBounds: LatLngBounds, Layer: Layer, LayerGroup: LayerGroup, LineUtil: LineUtil, Map: Map, Marker: Marker, Mixin: Mixin, Path: Path, Point: Point, PolyUtil: PolyUtil, Polygon: Polygon, Polyline: Polyline, Popup: Popup, PosAnimation: PosAnimation, Projection: index, Rectangle: Rectangle, Renderer: Renderer, SVG: SVG, SVGOverlay: SVGOverlay, TileLayer: TileLayer, Tooltip: Tooltip, Transformation: Transformation, Util: Util, VideoOverlay: VideoOverlay, bind: bind, bounds: toBounds, canvas: canvas, circle: circle, circleMarker: circleMarker, control: control, divIcon: divIcon, extend: extend, featureGroup: featureGroup, geoJSON: geoJSON, geoJson: geoJson, gridLayer: gridLayer, icon: icon, imageOverlay: imageOverlay, latLng: toLatLng, latLngBounds: toLatLngBounds, layerGroup: layerGroup, map: createMap, marker: marker, point: toPoint, polygon: polygon, polyline: polyline, popup: popup, rectangle: rectangle, setOptions: setOptions, stamp: stamp, svg: svg, svgOverlay: svgOverlay, tileLayer: tileLayer, tooltip: tooltip, transformation: toTransformation, version: version, videoOverlay: videoOverlay };
+
+// Added by datasette-leaflet: Datasette pages are served with
+// "Referrer-Policy: no-referrer", but tile servers such as
+// tile.openstreetmap.org block requests that have no Referer header.
+// Tiles send the origin of this site by default - change that with the
+// tile_referrer_policy plugin setting or the referrerPolicy layer option
+(function () {
+  var config = (window.datasette && window.datasette.leaflet) || {};
+  var policy = config.TILE_REFERRER_POLICY;
+  window.L.TileLayer.mergeOptions({
+    referrerPolicy:
+      policy === undefined ? "strict-origin-when-cross-origin" : policy
+  });
+})();
