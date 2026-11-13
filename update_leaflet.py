@@ -13,6 +13,7 @@ After running, update JS_FILE / CSS_FILE in datasette_leaflet/__init__.py and
 the version strings in tests/test_datasette_leaflet.py to match.
 """
 import pathlib
+import re
 import sys
 import urllib.request
 
@@ -47,6 +48,28 @@ def strip_sourcemap(text):
     return "\n".join(lines) + "\n"
 
 
+def add_global_l(js):
+    # The ES module build only exports names, it does not create the global L
+    # that Leaflet plugins such as Leaflet.markercluster expect. Append a
+    # window.L built from the export list at the end of the file, so that
+    # "export { toBounds as bounds, canvas }" gives "bounds: toBounds, canvas: canvas"
+    match = re.search(r"export \{([^}]*)\};?\s*$", js)
+    if match is None:
+        raise ValueError("Could not find the export list at the end of the ES module")
+    pairs = []
+    for item in match.group(1).split(","):
+        local, _, exported = item.strip().partition(" as ")
+        pairs.append("{}: {}".format(exported or local, local))
+    return (
+        js.rstrip("\n")
+        + "\n\n// Added by datasette-leaflet: the ES module build does not create the\n"
+        + "// global L that plugins such as Leaflet.markercluster expect\n"
+        + "window.L = { "
+        + ", ".join(pairs)
+        + " };\n"
+    )
+
+
 def main():
     version = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_VERSION
     base = "https://unpkg.com/leaflet@{}/dist".format(version)
@@ -56,9 +79,16 @@ def main():
         print("Removing {}".format(old.name))
         old.unlink()
 
-    # JavaScript: leaflet-src.js is the readable build, leaflet.js is minified
+    # JavaScript. The main file is the ES module build so it can be loaded with
+    # a dynamic `import()` (see README) - leaflet-src.esm.js ends in `export {}`.
+    # add_global_l() makes importing it set window.L as well.
+    # leaflet.js is the minified UMD/global build for plain `<script>` use.
     (STATIC / "leaflet-v{}.js".format(version)).write_text(
-        strip_sourcemap(fetch("{}/leaflet-src.js".format(base)).decode("utf-8"))
+        add_global_l(
+            strip_sourcemap(
+                fetch("{}/leaflet-src.esm.js".format(base)).decode("utf-8")
+            )
+        )
     )
     (STATIC / "leaflet-v{}.min.js".format(version)).write_text(
         strip_sourcemap(fetch("{}/leaflet.js".format(base)).decode("utf-8"))
@@ -73,9 +103,13 @@ def main():
     for name in IMAGE_FILES:
         (IMAGES / name).write_bytes(fetch("{}/images/{}".format(base, name)))
 
-    # License
+    # License - fetched from the matching tag in the Leaflet source repo
     (STATIC / "Leaflet-LICENSE").write_bytes(
-        fetch("https://unpkg.com/leaflet@{}/LICENSE".format(version))
+        fetch(
+            "https://raw.githubusercontent.com/Leaflet/Leaflet/refs/tags/v{}/LICENSE".format(
+                version
+            )
+        )
     )
 
     print(

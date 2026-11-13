@@ -17,10 +17,14 @@ Changelog = "https://github.com/simonw/datasette-leaflet/releases"
 [project.entry-points.datasette]
 leaflet = "datasette_leaflet"
 
+[project.optional-dependencies]
+playwright = ["pytest-playwright"]
+
 [dependency-groups]
 dev = [
     "pytest",
     "pytest-asyncio",
+    "datasette-test",
 ]
 
 [build-system]
