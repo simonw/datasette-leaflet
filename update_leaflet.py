@@ -109,7 +109,7 @@ def main():
             "https://raw.githubusercontent.com/Leaflet/Leaflet/refs/tags/v{}/LICENSE".format(
                 version
             )
-        )
+        ).replace(b"\r\n", b"\n")  # The tagged file has CRLF line endings
     )
 
     print(
